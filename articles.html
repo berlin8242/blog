@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tous les articles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Tous les articles</h1>
+    <ul>
+        <li><a href="article.html">Titre de l’article - Date - Auteur</a></li>
+        <li><a href="article.html">Titre de l’article - Date - Auteur</a></li>
+        <li><a href="article.html">Titre de l’article - Date - Auteur</a></li>
+        <li><a href="article.html">Titre de l’article - Date - Auteur</a></li>
+        <li><a href="article.html">Titre de l’article - Date - Auteur</a></li>
+    </ul>
+    <a href="login.html">Déconnexion</a>
+    <script>
+        document.querySelector('a[href="login.html"]').addEventListener('click', function(e) {
+            alert("Vous êtes déconnecté");
+        });
+    </script>    
+</body>
+</html>

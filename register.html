@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>S'inscrire</h1>
+    <form action="https://inscription" method="POST">
+        <label for="password">Mot de passe</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <p>Le mot de passe doit comporter :</p>
+        <ul>
+            <li>Au moins une minuscule</li>
+            <li>Au moins une majuscule</li>
+            <li>Au moins un chiffre</li>
+            <li>Au moins un caractère spécial</li>
+        </ul>
+        <button type="submit">S'inscrire</button>
+    </form>
+    <p>Déjà inscrit ? <a href="login.html">Connectez-vous</a></p>
+    <script>
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const lowercase = /[a-z]/g;
+            const uppercase = /[A-Z]/g;
+            const number = /[0-9]/g;
+            const specialChar = /[^a-zA-Z0-9]/g;
+    
+            if (password.match(lowercase) && password.match(uppercase) && password.match(number) && password.match(specialChar)) {
+                this.style.borderColor = "green";
+            } else {
+                this.style.borderColor = "red";
+            }
+        });
+    </script>    
+</body>
+</html>
