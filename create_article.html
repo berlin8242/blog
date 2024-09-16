@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un Article</title>
+    <link rel="stylesheet" href="create_article.css">
+</head>
+
+<body>
+    <main>
+        <section>
+            <h1>Créer un Article</h1>
+            <form id="create-article-form" enctype="multipart/form-data">
+                <label for="title">Titre de l'article</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="content">Contenu</label>
+                <textarea id="content" name="content" rows="4" required></textarea>
+
+                <label for="image">Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+
+                <button type="submit">Créer l'article</button>
+            </form>
+            <p><a href="articles.html">Retour à la liste des articles</a></p>
+        </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('create-article-form');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('http://localhost:3000/articles', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la création de l\'article');
+                    }
+
+                    const result = await response.json();
+                    console.log('Article créé avec succès', result);
+
+                    // Optionnel: Redirection après succès
+                    window.location.href = 'articles.html';
+                } catch (error) {
+                    console.error('Erreur:', error.message);
+                    alert('Erreur lors de la création de l\'article: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,40 +1,73 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription</title>
+  <link rel="stylesheet" href="register.css">
 </head>
+
 <body>
-    <h1>S'inscrire</h1>
-    <form action="https://inscription" method="POST">
-        <label for="password">Mot de passe</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-        <p>Le mot de passe doit comporter :</p>
-        <ul>
-            <li>Au moins une minuscule</li>
-            <li>Au moins une majuscule</li>
-            <li>Au moins un chiffre</li>
-            <li>Au moins un caractère spécial</li>
-        </ul>
+  <main>
+    <section>
+      <h1>S'inscrire</h1>
+      <form id="inscription-form" method="POST">
+        <label for="email">Adresse e-mail</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required>
+
         <button type="submit">S'inscrire</button>
-    </form>
-    <p>Déjà inscrit ? <a href="login.html">Connectez-vous</a></p>
-    <script>
-        document.getElementById('password').addEventListener('input', function() {
-            const password = this.value;
-            const lowercase = /[a-z]/g;
-            const uppercase = /[A-Z]/g;
-            const number = /[0-9]/g;
-            const specialChar = /[^a-zA-Z0-9]/g;
-    
-            if (password.match(lowercase) && password.match(uppercase) && password.match(number) && password.match(specialChar)) {
-                this.style.borderColor = "green";
-            } else {
-                this.style.borderColor = "red";
+      </form>
+      <p>Déjà inscrit ? <a href="login.html">Connectez-vous</a></p>
+    </section>
+  </main>
+
+  <script>
+    // Sélectionner les éléments du formulaire
+    const form = document.getElementById('inscription-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    // Ajouter un écouteur d'événement pour l'envoi du formulaire
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Vérifier la validité des champs du formulaire
+      if (emailInput.checkValidity() && passwordInput.checkValidity()) {
+        const formData = {
+          email: emailInput.value,
+          password: passwordInput.value
+        };
+
+        // Envoyer les données via une requête POST à l'API
+        fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+          .then(response => response.json().then(data => ({ status: response.status, body: data })))
+          .then(({ status, body }) => {
+            if (status !== 201) {
+              throw new Error(body.message || 'Erreur lors de l\'inscription');
             }
-        });
-    </script>    
+            console.log('Inscription réussie', body);
+            window.location.href = 'login.html';
+          })
+          .catch(error => {
+            console.error('Erreur:', error.message);
+            alert('Erreur lors de l\'inscription: ' + error.message);
+          });
+      } else {
+        emailInput.reportValidity();
+        passwordInput.reportValidity();
+      }
+    });
+  </script>
 </body>
+
 </html>

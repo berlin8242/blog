@@ -1,18 +1,65 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titre de l'article</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Détails de l'article sélectionné.">
+  <title>Détails de l'article</title>
+  <link rel="stylesheet" href="article.css">
 </head>
+
 <body>
-    <h1>Titre de l'article</h1>
-    <p>Date | Auteur</p>
-    <article>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur repellendus numquam laboriosam delectus assumenda laudantium...</p>
-        <!-- Repeated content omitted for brevity -->
-    </article>
-    <p><a href="articles.html">Tous les articles</a></p>
+  <header>
+    <h1>Détails de l'article</h1>
+  </header>
+  <main>
+    <section id="article-details">
+      <!-- Les détails de l'article seront insérés ici dynamiquement -->
+    </section>
+  </main>
+  <footer>
+    <a href="articles.html" title="Retourner à la liste des articles">Retour à la liste des articles</a>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fonction pour obtenir les paramètres de l'URL
+      const getQueryParam = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      };
+
+      // Récupérer l'ID de l'article depuis l'URL
+      const articleId = getQueryParam('id');
+
+      if (articleId) {
+        // Utiliser les backticks (``) pour la syntaxe correcte
+        fetch(`http://localhost:3000/articles/${articleId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erreur réseau lors de la récupération des données.');
+            }
+            return response.json();
+          })
+          .then(article => {
+            const articleDetails = document.getElementById('article-details');
+            articleDetails.innerHTML = `
+              <h2>${article.title}</h2>
+              <img src="http://localhost:3000/images/${article.image}" alt="${article.title}" style="width: 100%; height: auto;">
+              <p><strong>${article.content}</strong></p>
+              <p><strong>Auteur:</strong> ${article.author}</p>
+              <p><strong>Date de publication:</strong> ${new Date(article.created_at).toLocaleDateString('fr-FR')}</p>
+            `;
+          })
+          .catch(error => {
+            console.error('Erreur lors de la récupération des détails de l\'article:', error);
+            document.getElementById('article-details').innerHTML = `<p>Erreur lors de la récupération des détails de l'article.</p>`;
+          });
+      } else {
+        document.getElementById('article-details').innerHTML = `<p>ID d'article non spécifié.</p>`;
+      }
+    });
+  </script>
 </body>
+
 </html>
